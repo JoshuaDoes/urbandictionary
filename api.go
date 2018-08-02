@@ -2,6 +2,7 @@ package urbandictionary
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -54,6 +55,10 @@ func Query(searchTerm string) (*SearchResult, error) {
 	err = json.Unmarshal(body, res)
 	if err != nil {
 		return nil, err
+	}
+
+	if len(res.Results) == 0 {
+		return nil, errors.New("No results were found")
 	}
 
 	for _, result := range res.Results {
